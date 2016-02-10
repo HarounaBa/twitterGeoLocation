@@ -1,30 +1,45 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@page import="org.harouna.model.HashTags"%>
+<%@page import="java.util.*"%>
+<%@page import="twitter4j.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<script
-	src="https://maps.googleapis.com/maps/api/js"></script>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<%
+	HashTags hashTag = new HashTags();
+	List<GeoLocation> listGeo = new ArrayList<GeoLocation>();
+	listGeo = hashTag.getGeoLocation("#SuperBowl");
+	//List<Double> listLat = hashTag.getLat(listGeo);
+	//List<Double> listLong = hashTag.getLong(listGeo);
+	%>
 <script>
 var map;
-var myLatlng =  new google.maps.LatLng(0,0);
+
 
 
 function initialize() {
   var mapOptions = {
-    zoom: 8,
+    zoom: 2,
     center: new google.maps.LatLng(0, 0),
   };
+  
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
   
-  var marker = new google.maps.Marker({
-	    position: myLatlng,
-	    title:"BONJOUR!"
-	});
-	marker.setMap(map);
+  <%for(int i = 0; i <listGeo.size(); i ++ ){%>
+	  var marker = new google.maps.Marker({
+		    position: new google.maps.LatLng(<%=listGeo.get(i).getLatitude()%>,<%=listGeo.get(i).getLongitude()%>),
+		    title:"BONJOUR!"
+		});
+	  marker.setMap(map);
+ <% }%>
+
+	
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
