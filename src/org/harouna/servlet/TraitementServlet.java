@@ -43,7 +43,7 @@ public class TraitementServlet extends HttpServlet {
 		String hashtag = request.getParameter("hashtag");
 	    
 		request.setAttribute("hashtag", hashtag);
-		RequestDispatcher rd = request.getRequestDispatcher("/testMapPage.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
 		rd.forward(request, response);
 	}
 

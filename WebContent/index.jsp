@@ -13,61 +13,49 @@
 <%
 	HashTags hashTag = new HashTags();
 	List<GeoLocation> listGeo = new ArrayList<GeoLocation>();
-	listGeo = hashTag.getGeoLocation("#SuperBowl");
+	listGeo = hashTag.getGeoLocation(request.getParameter("hashtag"));
 	//List<Double> listLat = hashTag.getLat(listGeo);
 	//List<Double> listLong = hashTag.getLong(listGeo);
-	%>
+%>
 <script>
-var map;
+	var map;
 
+	function initialize() {
+		var mapOptions = {
+			zoom : 2,
+			center : new google.maps.LatLng(0, 0),
+		};
 
-
-function initialize() {
-  var mapOptions = {
-    zoom: 2,
-    center: new google.maps.LatLng(0, 0),
-  };
-  
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-  
-  <%for(int i = 0; i <listGeo.size(); i ++ ){%>
-	  var marker = new google.maps.Marker({
-		    position: new google.maps.LatLng(<%=listGeo.get(i).getLatitude()%>,<%=listGeo.get(i).getLongitude()%>),
-		    title:"BONJOUR!"
+		map = new google.maps.Map(document.getElementById('map-canvas'),
+				mapOptions);
+<%for (int i = 0; i < listGeo.size(); i++) {%>
+	var marker = new google.maps.Marker({
+			position : new google.maps.LatLng(
+<%=listGeo.get(i).getLatitude()%>
+	,
+<%=listGeo.get(i).getLongitude()%>
+	),
+			title : "BONJOUR!"
 		});
-	  marker.setMap(map);
- <% }%>
+		marker.setMap(map);
+<%}%>
+	}
 
-	
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
-
+	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 
-<!-- 
-<script >
-function initMap() {
-	  var myLatLng = {lat: -25.363, lng: 131.044};
-
-	  // Create a map object and specify the DOM element for display.
-	  var map = new google.maps.Map(document.getElementById('map-canvas'), {
-	    center: myLatLng,
-	    scrollwheel: false,
-	    zoom: 4
-	  });
-
-	  // Create a marker and set its position.
-	  var marker = new google.maps.Marker({
-	    map: map,
-	    position: myLatLng,
-	    title: 'Hello World!'
-	  });
-	}
-</script> -->
 </head>
 <body>
+
+	<form action="TraitementServlet" method="post">
+		<p>
+			Hashtag : <input type="text" name="hashtag" />
+		</p>
+		<p>
+			<input type="submit" value="ok" />
+		</p>
+
+	</form>
 	<div id="map-canvas" style="height: 300px; width: 500px"></div>
 
 </body>
