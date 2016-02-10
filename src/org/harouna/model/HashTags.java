@@ -1,5 +1,6 @@
 package org.harouna.model;
 
+import java.util.List;
 import java.util.Map;
 
 import twitter4j.GeoLocation;
@@ -19,9 +20,9 @@ public class HashTags {
 	public static String OAUTH_CONSUMER1 = "2SNP2Do8lLavSUfu2BdYf4PH5";
 	public static String OAUTH_CONSUMER2 = "Xzfrz8NeDuvZn65Kz3IU8S9rBzVRYUv8wnDCoKi6Bgl731Nwfj";
 
-	private static final int MAX_QUERIES= 5;
+	private static final int MAX_QUERIES= 9;
 	private static final int TWEETS_PER_QUERY	= 100;
-	private static final String SEARCH_TERM	= "#Paris";
+	private static final String SEARCH_TERM	= "#NationalPizzaDay";
 
 	public static String cleanText(String text) {
 		text = text.replace("\n", "\\n");
@@ -40,8 +41,9 @@ public class HashTags {
 		.setOAuthConsumerKey(OAUTH_CONSUMER1)
 		.setOAuthConsumerSecret(OAUTH_CONSUMER2)
 		.setOAuthAccessToken(ACCESS_TOKEN1)
-		.setOAuthAccessTokenSecret(ACCESS_TOKEN2);
-
+		.setOAuthAccessTokenSecret(ACCESS_TOKEN2)
+		.setIncludeMyRetweetEnabled(false);
+		
 		TwitterFactory factory = new TwitterFactory(cb.build());
 		Twitter twitter = factory.getInstance();
 
@@ -60,7 +62,7 @@ public class HashTags {
 
 					Thread.sleep((searchTweetsRateLimit.getSecondsUntilReset()+2) * 1000l);
 				}
-				Query q = new Query(SEARCH_TERM);
+				Query q = new Query(SEARCH_TERM + " +exclude:retweets");
 				q.setCount(TWEETS_PER_QUERY);	// How many tweets, max, to retrieve 
 				//q.resultType("recent");	// Get all tweets 
 
@@ -76,15 +78,18 @@ public class HashTags {
 					break;	// Nothing? We must be done
 				} 
 				// Loop through all the tweets... 
-
-				for (Status s: r.getTweets())	{ //	Increment our count of tweets retrieved 
-
+				List<Status> listStatus = r.getTweets();
+				for (Status s: listStatus)	{ //	Increment our count of tweets retrieved 
+					
 					Place place = s.getPlace();
-					if(place.getBoundingBoxCoordinates() == null){
-						System.out.println("Null");
-					}
-					else{
-					GeoLocation[][] box = place.getBoundingBoxCoordinates();
+					System.out.println("PLACE : " +place);
+					System.out.println(s.getUser().getScreenName());
+					System.out.println("STATUS : " + s.getGeoLocation());
+//					if(place.getBoundingBoxCoordinates() == null){
+//						System.out.println("Null");
+//					}
+//					else{
+//					GeoLocation[][] box = place.getBoundingBoxCoordinates();
 
 					totalTweets++; //	Keep track of the lowest tweet ID. If you do not do this, you cannot retrieve multiple //	blocks of tweets... 
 					if (maxID == -1 || s.getId() < maxID) {
@@ -92,19 +97,19 @@ public class HashTags {
 					} //	Do something with the tweet.... 
 					System.out.printf("At %s, @%-20s said: %s\n", s.getCreatedAt().toString(), s.getUser().getScreenName(), cleanText(s.getText()));
 
-					for(int i = 0; i<r.getTweets().size() ;i++){
-
-						for(int j=0 ; j< r.getTweets().size() ;j++){
-
-							System.out.println("\n==========TEST Latitude =============== " + s.getUser().getName() + " : "+ box[i][j].getLatitude()); 
-							System.out.println("==========TEST:Longitude =============== " + s.getUser().getName() + ": "  + box[i][j].getLongitude()); 
-
-						}
-					}
+//					for(int i = 0; i<r.getTweets().size() ;i++){
+//
+//						for(int j=0 ; j< r.getTweets().size() ;j++){
+//
+//							System.out.println("\n==========TEST Latitude =============== " + s.getUser().getName() + " : "+ box[i][j].getLatitude()); 
+//							System.out.println("==========TEST:Longitude =============== " + s.getUser().getName() + ": "  + box[i][j].getLongitude()); 
+//
+//						}
+//					}
 				}
 				searchTweetsRateLimit = r.getRateLimitStatus();
 				}
-			}
+//			}
 		}
 		catch (Exception e) {
 			//	Catch all -- you're going to read the stack trace and figure out what needs to be done to fix it 

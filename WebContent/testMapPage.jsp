@@ -9,13 +9,14 @@
 	src="https://maps.googleapis.com/maps/api/js"></script>
 <script>
 var map;
-var myLatlng =  new google.maps.LatLng(0,0);
+var myLatlng =  new google.maps.LatLng(48.8534100,2.3488000);
 
 
 function initialize() {
   var mapOptions = {
-    zoom: 8,
+    zoom: 5,
     center: new google.maps.LatLng(0, 0),
+  	
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
@@ -30,30 +31,13 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
-
-<!-- 
-<script >
-function initMap() {
-	  var myLatLng = {lat: -25.363, lng: 131.044};
-
-	  // Create a map object and specify the DOM element for display.
-	  var map = new google.maps.Map(document.getElementById('map-canvas'), {
-	    center: myLatLng,
-	    scrollwheel: false,
-	    zoom: 4
-	  });
-
-	  // Create a marker and set its position.
-	  var marker = new google.maps.Marker({
-	    map: map,
-	    position: myLatLng,
-	    title: 'Hello World!'
-	  });
-	}
-</script> -->
 </head>
 <body>
+	<p>
+		Recuperation hashtag : 
+		<%= request.getParameter("hashtag")%>
+		
+	</p>
 	<div id="map-canvas" style="height: 300px; width: 500px"></div>
-
 </body>
 </html>
