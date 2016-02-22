@@ -1,62 +1,35 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@page import="org.harouna.model.HashTags"%>
-<%@page import="java.util.*"%>
-<%@page import="twitter4j.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-<script src="https://maps.googleapis.com/maps/api/js"></script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="Public/img/markerIcone.ico">
 
-<%
-	HashTags hashTag = new HashTags();
-	List<GeoLocation> listGeo = new ArrayList<GeoLocation>();
-	listGeo = hashTag.getGeoLocation(request.getParameter("hashtag"));
-	//List<Double> listLat = hashTag.getLat(listGeo);
-	//List<Double> listLong = hashTag.getLong(listGeo);
-%>
-<script>
-	var map;
-
-	function initialize() {
-		var mapOptions = {
-			zoom : 2,
-			center : new google.maps.LatLng(0, 0),
-		};
-
-		map = new google.maps.Map(document.getElementById('map-canvas'),
-				mapOptions);
-<%for (int i = 0; i < listGeo.size(); i++) {%>
-	var marker = new google.maps.Marker({
-			position : new google.maps.LatLng(
-<%=listGeo.get(i).getLatitude()%>
-	,
-<%=listGeo.get(i).getLongitude()%>
-	),
-			title : "BONJOUR!"
-		});
-		marker.setMap(map);
-<%}%>
-	}
-
-	google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-
+<title>GeolocationTwitter</title>
+<%@ include file="Partials/_brother.jsp"%>
+<link href="carousel.css" rel="stylesheet">
 </head>
+
 <body>
+	
+<!-- NAVBAR
+================================================== -->
+<%@ include file="Partials/_menu.jsp"%>
 
-	<form action="TraitementServlet" method="post">
-		<p>
-			Hashtag : <input type="text" name="hashtag" />
-		</p>
-		<p>
-			<input type="submit" value="ok" />
-		</p>
+<!-- Carousel
+    ================================================== -->
+<%@ include file="Partials/_caroussel.jsp"%>
 
-	</form>
-	<div id="map-canvas" style="height: 300px; width: 500px"></div>
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<%@ include file="Partials/_javascripts.jsp"%>
+<!-- FOOTER -->
+<%@ include file="Partials/_footer.jsp"%>
+
 
 </body>
+
 </html>
